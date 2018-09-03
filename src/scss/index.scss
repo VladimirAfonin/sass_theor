@@ -1,0 +1,51 @@
+@import "_config.scss";
+@import "partials/_mixins.scss";
+
+@include google-font-load(Roboto); // подключаем в корне
+
+@mixin font($size) {        // mixin
+  font-size: $size;
+  font-weight: bold;
+}
+
+@mixin color {
+  color: white;
+  @include font(12px);
+}
+
+@mixin box-shadow($shadow...) {   // оператор rest
+  box-shadow: $shadow;            // перечисляем через ',' и все корректно работает
+}
+
+@mixin large-screen() {
+  @media only screen and (max-width: 960px) { // медиа запрос
+    @content;                                 // сюда будет помещаться типа ob_flush();
+  }
+}
+
+@mixin tiny-screen() {
+  @media only screen and (max-width: 320px) {
+    @content;
+  }
+}
+
+
+body {
+  background-color: $background-color;
+  @include font(14px);
+  @include box-shadow(1px 1px 1px 1px #eee, 2px 2px 2px black);
+  p {
+   font-family: Roboto;
+  }
+
+  @include large-screen {
+    font-size: 125%;          // for '@content'
+  }
+
+  @include tiny-screen {
+    background-color: violet;
+  }
+}
+
+
+
