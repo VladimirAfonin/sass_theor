@@ -3,7 +3,10 @@
 
 @include google-font-load(Roboto); // подключаем в корне
 
-@mixin font($size) {        // mixin
+$color: yellow;
+$theme: theme-2;
+
+@mixin font($size) {        // mixin trait
   font-size: $size;
   font-weight: bold;
 }
@@ -29,6 +32,18 @@
   }
 }
 
+@function sum($from, $to) { // собственные ф-ции
+  @return $from + $to;
+}
+
+@function px-to-em($px, $context: 16px) {
+  @return ($px / $context) * 1em;
+}
+
+@function strip-value($value) {
+  @return $value / (($value * 0) + 1);
+}
+
 
 body {
   background-color: $background-color;
@@ -45,6 +60,60 @@ body {
   @include tiny-screen {
     background-color: violet;
   }
+}
+
+.error {
+  border-bottom: red;
+}
+
+h3 {
+  font-size: 20px;
+}
+
+.critical-error {
+  @extend h3;
+}
+
+h1 {
+  @extend .error;         // наследование
+  color: $color;
+  margin: px-to-em(30px);
+  padding: strip-value(40em) * 1vh;
+  &:hover {
+    color: darken($color, 15%);
+    size: sum(5,4);
+  }
+
+  @if $theme == theme-1 {    // условные операторы
+    color: red;
+  } @else if $theme == theme-2 {
+    color: blue;
+  } @else {
+    color: green;
+  }
+
+}
+
+@for $i from 1 through 4 {          // цикл 'for'
+  .col-sx-#{$i} {
+    width: $i + 2em;
+  }
+}
+
+$fonts: (tiny: 8px, medium: 10px, large: 13px); // цикл 'each'
+@each $name, $value in $fonts {
+  .#{$name} {                     // шаблонизатор
+    font-size: $value;
+  }
+}
+
+
+$i: 5;                          // цикл 'while'
+@while $i <= 11 {
+ .picture-#{$i} {
+   width: $i * 15%;
+ }
+  $i: $i + 1;           // след виток цикла
 }
 
 
